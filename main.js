@@ -1,57 +1,82 @@
-// require("dotenv").config();
-let arrayOfPosts;
+let pokemon1;
 let backArray;
+let pokemon2;
 
-// const button = document.createElement('button');
-// button.innerHTML = 'Start'
-// document.body.append(button);
+const list = document.querySelector('ul')
 
 window.onload = function () {
   getPosts();
-  background();
+  getPosts2();
 };
 
 const getPosts = () => {
-  fetch("https://pokeapi.co/api/v2/pokemon/35/")
+  const random = Math.floor(Math.random() * 100);
+  fetch(`https://pokeapi.co/api/v2/pokemon/${random}`)
     .then((res) => res.json())
     .then((array) => {
-      arrayOfPosts = array;
+      pokemon1 = array;
     });
 };
 
-const background = () => {
-  fetch("https://pokeapi.co/api/v2/location/1/")
+const getPosts2 = () => {
+  const random2 = Math.floor(Math.random() * 100);
+  fetch(`https://pokeapi.co/api/v2/pokemon/${random2}`)
     .then((res) => res.json())
-    .then((array) => (backArray = array));
-  console.log(backArray);
+    .then((array) => {
+      pokemon2 = array;
+    });
 };
 
-const pokemon1 = () => {
+
+const poke = () => {
   const div = document.createElement("div");
   const img = document.createElement("img");
-  console.log(arrayOfPosts);
+  const name = document.createElement("li");
+  name.innerHTML = (`Name: ${pokemon1.species.name} <br> 
+  HP: ${pokemon1.stats[0].base_stat} <br> 
+  Attack: ${pokemon1.stats[1].base_stat} <br> 
+  Defense: ${pokemon1.stats[2].base_stat}
+    `);
+  // name.appendChild(nameText);
+  console.log(pokemon1);
   img.src =
-    arrayOfPosts.sprites.versions["generation-iv"][
+    pokemon1.sprites.versions["generation-iv"][
       "heartgold-soulsilver"
     ].back_shiny;
   div.append(img);
-  document.body.append(div);
+  name.append(div);
+  list.append(name);
 };
 
-const pokemon2 = () => {
-  arrayOfPosts.map(
-    (sprite) =>
-      sprite.sprites.versions["generation-iv"]["heartgold-soulsilver"]
-        .front_shiny
-  );
+const poke2 = () => {
+  const div = document.createElement("div");
+  const img = document.createElement("img");
+  const name = document.createElement("li");
+  name.innerHTML = (`Name: ${pokemon2.species.name} <br> 
+  HP: ${pokemon2.stats[0].base_stat} <br> 
+  Attack: ${pokemon2.stats[1].base_stat} <br> 
+  Defense: ${pokemon2.stats[2].base_stat}
+    `);
+  // name.appendChild(nameText);
+  console.log(pokemon2);
+  img.src =
+    pokemon2.sprites.versions["generation-iv"][
+      "heartgold-soulsilver"
+    ].back_shiny;
+  div.append(img);
+  div.id = "poke";
+  name.append(div);
+  list.append(name);
 };
 
-const start = document.createElement("button");
-start.innerHTML = "Start";
-document.body.append(start);
-start.addEventListener("click", pokemon1);
-start.onclick = () => {
-  const text = document.createTextNode(
-    `Name: ${user.species.name}, HP: ${user.stats.base_stat}`
-  );
+const begin = () => {
+  const poke1Stats = pokemon1.stats[0].base_stat;
+  const poke2Stats = pokemon2.stats[0].base_stat;
+  if (poke1Stats > poke2Stats) {
+    window.alert(`Pokemon: ${pokemon1.species.name} Won!`);
+  } else if (poke2Stats > poke1Stats) {
+    window.alert(`Pokemon: ${pokemon2.species.name} Won!`);
+  } else if (poke1Stats === poke2Stats) {
+    window.alert(`Both ${pokemon1.species.name} & ${pokemon2.species.name} fainted!`);
+  }
 };
